@@ -47,30 +47,42 @@ class GameOfLife {
 
   neighborsCount(posX, posY) {
     let cells = 0;
-    for (let i = -1; i <= 1; i += 1) {
+
+    const addCount = (rowC, colC) => {
+      if (rowC >= 0 && colC >= 0 && rowC < this.rows && colC < this.cols) {
+        cells += this.grid[rowC][colC];
+      }
+    };
+
+    const colsScan = (i) => {
       for (let j = -1; j <= 1; j += 1) {
         const rowC = posX + i;
         const colC = posY + j;
-        if (rowC >= 0 && colC >= 0 && rowC < this.rows && colC < this.cols) {
-          cells += this.grid[rowC][colC];
-        }
+        addCount(rowC, colC);
       }
+    };
+
+    for (let i = -1; i <= 1; i += 1) {
+      colsScan(i);
     }
     if (this.grid[posX][posY] === 1) cells -= 1;
     return cells;
   }
 
   printGrid() {
-    for (let i = 0; i < this.rows; i += 1) {
-      let col = '';
-      for (let j = 0; j < this.cols; j += 1) {
-        if (this.grid[i][j] === 1) {
-          col += '*';
-        } else {
-          col += '.';
-        }
+    const printCell = (i, j) => {
+      if (this.grid[i][j] === 1) {
+        return '*';
       }
-      console.log(col);
+      return '.';
+    };
+
+    for (let i = 0; i < this.rows; i += 1) {
+      let row = '';
+      for (let j = 0; j < this.cols; j += 1) {
+        row += printCell(i, j);
+      }
+      console.log(row);
     }
   }
 
